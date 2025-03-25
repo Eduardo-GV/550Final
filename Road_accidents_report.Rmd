@@ -23,7 +23,7 @@ Additionally, a logistic regression model will to be fit to examine age and impa
 ```{r, establishing the relative filepath and loading the data}
 
 here::i_am("Road_accidents_report.Rmd")
-data <- read.csv("accident.csv")
+data <- read.csv("data/accident.csv")
 
 ```
 
@@ -32,23 +32,9 @@ data <- read.csv("accident.csv")
 ```{r, conducting the chi-squared test}
 
 cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
-
 chi_squared_test <- chisq.test(cross_tabulation)
-
-
 ```
 
-
-```{r, saving the chi-squared as data frame}
-
-chi_squared_summary <- data.frame(
-  Statistic = chi_squared_test$statistic,
-  p_value = chi_squared_test$p.value,
-  Degrees_of_Freedom = chi_squared_test$parameter,
-  Expected_Values = paste(chi_squared_test$expected, collapse = ", ")
-)
-
-```
 
 
 # Analysis Table
