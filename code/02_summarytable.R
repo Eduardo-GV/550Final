@@ -1,4 +1,13 @@
 
+#Reading in the data
+here::i_am("code/01_chisqtest.R")
+data <- read.csv("data/accident.csv")
+
+
+#Conducting chi-squared for seatbelt use and survival status
+
+cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
+chi_squared_test <- chisq.test(cross_tabulation)
 
 
 #Loading the gt package, to be used for making my table

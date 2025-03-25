@@ -6,9 +6,9 @@ here::i_am("code/01_chisqtest.R")
 here::i_am("code/01_chisqtest.R")
 data <- read.csv("data/accident.csv")
 
+
 #Conducting chi-squared for seatbelt use and survival status
 
 cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
 chi_squared_test <- chisq.test(cross_tabulation)
-
 

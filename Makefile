@@ -6,7 +6,7 @@ Road_accidents_report.html: render_combined_report.R combined_report.Rmd \
 #! add a rule for rendering the combined report
 
 #! TO DO:
-output/table.rds: code/02_summarytable.R data/accident.csv 
+output/table.rds: code/02_summarytable.R  data/accident.csv 
 	Rscript code/02_summarytable.R
 #! add a rule for building the output of 
 #! subproject1/code/01_make_table1.R
