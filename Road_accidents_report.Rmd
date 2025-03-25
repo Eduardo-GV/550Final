@@ -1,0 +1,133 @@
+---
+title: "Road Accident Data"
+author: "Eduardo Gonzalez Villarreal"
+date: "`r format(Sys.Date(), '%b %d, %Y')`"
+output: html_document
+---
+
+```{r setup options, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
+```
+
+# Introduction
+
+This report focuses on road accident simulations that estimate the risk of real-world motor vehicle crashes. The dataset (n=200) records the speed at the moment of collision as well as three binary variables: seatbelt use, helmet use, and survival. The simulated participants' age and gender are also included in the data.
+
+### Analysis Objectives
+
+This preliminary analysis will focus on examining the relationship between seatbelt wear and collision survival using a chi-squared test. While seatbelts are an important safety feature and widely required by law, we are interested in whether there is a **significant** difference in the survival status of seatbelt users (compared to non-seatbelt users) after a crash.
+
+Additionally, a logistic regression model will to be fit to examine age and impact speed as predictors of collision survival status.
+
+
+```{r, establishing the relative filepath and loading the data}
+
+here::i_am("Road_accidents_report.Rmd")
+data <- read.csv("accident.csv")
+
+```
+
+
+
+```{r, conducting the chi-squared test}
+
+cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
+
+chi_squared_test <- chisq.test(cross_tabulation)
+
+
+```
+
+
+```{r, saving the chi-squared as data frame}
+
+chi_squared_summary <- data.frame(
+  Statistic = chi_squared_test$statistic,
+  p_value = chi_squared_test$p.value,
+  Degrees_of_Freedom = chi_squared_test$parameter,
+  Expected_Values = paste(chi_squared_test$expected, collapse = ", ")
+)
+
+```
+
+
+# Analysis Table
+
+Below is a table showing the count for each of the four seatbelt wear vs. survival categories, along with the corresponding chi-squared analysis. While there was a greater proportion of survival among seatbelt users, the distribution of survival status between groups is *not* statistically significantly different (p=0.49).
+
+```{r, creating a formatted summary table for the chi-squared analysis}
+
+library(gt)
+
+results_table <- as.data.frame(cross_tabulation) %>%
+  gt() %>%
+  tab_header(
+    title = "Chi-Squared for Seatbelt Wear vs. Survival Status"
+  ) %>%
+  cols_label(
+    Var1 = "Seatbelt Used",
+    Var2 = "Survived",
+    Freq = "Count"
+  ) %>%
+  tab_spanner(
+    label = "Chi-Squared Test Results",
+    columns = c(Var1, Var2, Freq)
+  ) %>%
+  tab_footnote(
+    footnote = paste("Chi-Squared Statistic: ", round(chi_squared_test$statistic, 2), 
+                     "| p-value: ", round(chi_squared_test$p.value, 4))
+  )
+
+results_table
+
+saveRDS(
+  results_table,
+  file = here::here("output/table.rds")
+)
+
+```
+
+
+# Figure for Data Visualization
+
+The figure below plots the simulated driver age (x-axis) and the speed of the collision (y-axis). I was interested in observing whether a person's age had any bearing on the speed of a car accident. The scatter plot points do not form any discernible pattern. And the line of best fit confirms that there is no linear association between age and speed of the collision. 
+
+```{r, creating the scatter plot}
+
+library(ggplot2)
+
+scatterplot <- ggplot(data, aes(x = Age, y = Speed_of_Impact)) +
+  geom_point() +  # Scatter plot points
+  geom_smooth() +
+  labs(title = "Speed of Collision vs. Age",
+       x = "Age (years)",
+       y = "Speed of Collision (miles per hour)" )
+
+scatterplot
+
+ggsave(
+  "output/scatter_plot.png",
+  plot = scatterplot,
+  device = "png"
+)
+
+
+```
+
+# Logistic Regression Model
+
+I fit a logistic regression model to the data to use age and collision speed as predictors for the binary survival outcome. The model shows a log-odds of 0.014 for age, which indicates means that there is a 1.45% increased odds of survival for every year older a person gets. However, this finding is not significant at the 5% level (p=0.136). The model also displays a log-odds of 0.002 for speed of impact, which corresponds to 0.21% increased odds of survival for every mile per hour faster, but was a chance finding nowhere close to statistical significance (p=0.662). 
+
+Based on my analysis, neither age nor speed of impact are good predictors of survival status. For future analysis, it would be interesting to record the type of crash (head-on, rear-end, T-bone, etc,) to see if that may be a significant predictor of survival status. 
+
+
+```{r, logistic regression, include=F}
+
+#Optional - add code with basic summary statistics of age and impact speeed
+
+logistic_model <- glm(Survived ~ Age + Speed_of_Impact, data = data, family = binomial)
+summary(logistic_model)
+
+```
+
+
