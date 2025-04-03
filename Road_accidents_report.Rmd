@@ -6,97 +6,54 @@ output: html_document
 ---
 
 ```{r setup options, include=FALSE, warning=FALSE}
+
 knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE)
 ```
+
+
 
 # Introduction
 
 This report focuses on road accident simulations that estimate the risk of real-world motor vehicle crashes. The dataset (n=200) records the speed at the moment of collision as well as three binary variables: seatbelt use, helmet use, and survival. The simulated participants' age and gender are also included in the data.
 
-### Analysis Objectives
+## Analysis Objectives
 
 This preliminary analysis will focus on examining the relationship between seatbelt wear and collision survival using a chi-squared test. While seatbelts are an important safety feature and widely required by law, we are interested in whether there is a **significant** difference in the survival status of seatbelt users (compared to non-seatbelt users) after a crash.
 
 Additionally, a logistic regression model will to be fit to examine age and impact speed as predictors of collision survival status.
 
 
-```{r, establishing the relative filepath and loading the data}
+```{r, establishing the relative filepath}
 
 here::i_am("Road_accidents_report.Rmd")
-data <- read.csv("data/accident.csv")
 
 ```
 
 
 
-```{r, conducting the chi-squared test}
-
-cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
-chi_squared_test <- chisq.test(cross_tabulation)
-```
-
-
-
-# Analysis Table
+# Chi-Squared Table
 
 Below is a table showing the count for each of the four seatbelt wear vs. survival categories, along with the corresponding chi-squared analysis. While there was a greater proportion of survival among seatbelt users, the distribution of survival status between groups is *not* statistically significantly different (p=0.49).
 
-```{r, creating a formatted summary table for the chi-squared analysis}
+```{r, table1}
 
 library(gt)
-
-results_table <- as.data.frame(cross_tabulation) %>%
-  gt() %>%
-  tab_header(
-    title = "Chi-Squared for Seatbelt Wear vs. Survival Status"
-  ) %>%
-  cols_label(
-    Var1 = "Seatbelt Used",
-    Var2 = "Survived",
-    Freq = "Count"
-  ) %>%
-  tab_spanner(
-    label = "Chi-Squared Test Results",
-    columns = c(Var1, Var2, Freq)
-  ) %>%
-  tab_footnote(
-    footnote = paste("Chi-Squared Statistic: ", round(chi_squared_test$statistic, 2), 
-                     "| p-value: ", round(chi_squared_test$p.value, 4))
-  )
-
-results_table
-
-saveRDS(
-  results_table,
-  file = here::here("output/table.rds")
+readRDS(
+  file = here::here("output/table1.rds")
 )
 
 ```
 
 
-# Figure for Data Visualization
+# Scatter Plot
 
 The figure below plots the simulated driver age (x-axis) and the speed of the collision (y-axis). I was interested in observing whether a person's age had any bearing on the speed of a car accident. The scatter plot points do not form any discernible pattern. And the line of best fit confirms that there is no linear association between age and speed of the collision. 
 
-```{r, creating the scatter plot}
+```{r, loading the scatter plot, fig.align="center", out.width="600px"}
 
-library(ggplot2)
-
-scatterplot <- ggplot(data, aes(x = Age, y = Speed_of_Impact)) +
-  geom_point() +  # Scatter plot points
-  geom_smooth() +
-  labs(title = "Speed of Collision vs. Age",
-       x = "Age (years)",
-       y = "Speed of Collision (miles per hour)" )
-
-scatterplot
-
-ggsave(
-  "output/scatter_plot.png",
-  plot = scatterplot,
-  device = "png"
+knitr::include_graphics(
+   here::here("output/scatterplot.png")
 )
-
 
 ```
 
@@ -107,12 +64,11 @@ I fit a logistic regression model to the data to use age and collision speed as 
 Based on my analysis, neither age nor speed of impact are good predictors of survival status. For future analysis, it would be interesting to record the type of crash (head-on, rear-end, T-bone, etc,) to see if that may be a significant predictor of survival status. 
 
 
-```{r, logistic regression, include=F}
+```{r, table2}
 
-#Optional - add code with basic summary statistics of age and impact speeed
-
-logistic_model <- glm(Survived ~ Age + Speed_of_Impact, data = data, family = binomial)
-summary(logistic_model)
+readRDS(
+  file = here::here("output/table2.rds")
+)
 
 ```
 

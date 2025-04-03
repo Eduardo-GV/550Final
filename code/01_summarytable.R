@@ -1,16 +1,19 @@
 
 #Reading in the data
-here::i_am("code/01_chisqtest.R")
+here::i_am("code/01_summarytable.R")
 data <- read.csv("data/accident.csv")
 
 
-#Conducting chi-squared for seatbelt use and survival status
+#Chi-squared test for seatbelt use and survival status
 
 cross_tabulation <- table(data$Seatbelt_Used, data$Survived)
 chi_squared_test <- chisq.test(cross_tabulation)
 
 
-#Loading the gt package, to be used for making my table
+#Download and call the gt package, which will be used to create the table
+if (!requireNamespace("gt", quietly = TRUE)) {
+  install.packages("gt")
+}
 library(gt)
 
 # Creating a table that summarizes seatbelt vs. survival status, including the chi-squared result 
@@ -35,8 +38,8 @@ results_table <- as.data.frame(cross_tabulation) %>%
 
 results_table
 
-#Saving my table in the output folder of my project directory 
+#Saving my table in the output folder
 saveRDS(
   results_table,
-  file = here::here("output/table.rds")
+  file = here::here("output/table1.rds")
 )
