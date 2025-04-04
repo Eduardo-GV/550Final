@@ -1,4 +1,4 @@
-#! TO DO: LEAVE UNTIL END
+
 Road_accidents_report.html: code/04_render.R Road_accidents_report.Rmd \
   output/table1.rds output/scatterplot.png output/table2.rds
 	Rscript code/04_render.R
