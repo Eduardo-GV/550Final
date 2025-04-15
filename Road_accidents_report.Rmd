@@ -59,9 +59,9 @@ knitr::include_graphics(
 
 # Logistic Regression Model
 
-I fit a logistic regression model to the data to use age and collision speed as predictors for the binary survival outcome. The model shows a log-odds of 0.014 for age, which indicates means that there is a 1.45% increased odds of survival for every year older a person gets. However, this finding is not significant at the 5% level (p=0.136). The model also displays a log-odds of 0.002 for speed of impact, which corresponds to 0.21% increased odds of survival for every mile per hour faster, but was a chance finding nowhere close to statistical significance (p=0.662). 
+I fit a logistic regression model to the data to use age and collision speed as predictors for the binary survival outcome. The model shows a log-odds of 0.014 for age, which indicates that there is a 1.45% increased odds of survival for every year older a person gets. However, this finding is not significant at the 5% level (p=0.136). The model also displays a log-odds of 0.002 for speed of impact, which corresponds to 0.21% increased odds of survival for every mile per hour faster, but was a chance finding nowhere close to statistical significance (p=0.662). 
 
-Based on my analysis, neither age nor speed of impact are good predictors of survival status. For future analysis, it would be interesting to record the type of crash (head-on, rear-end, T-bone, etc,) to see if that may be a significant predictor of survival status. 
+Based on my analysis, neither age nor speed of impact are good predictors of survival status. For future analysis, it would be interesting to record the type of crash (head-on, rear-end, T-bone, etc.) to see if that may be a significant predictor of survival status. 
 
 
 ```{r, table2}

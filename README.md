@@ -1,6 +1,13 @@
 
 # Project Description 
 
+
+## Synchronizing the package repository
+
+* Ensure your working directory is set to be this Final_project directory
+* Run `make install` from the command line to install all packages needed to generate the report
+
+
 ## Final report
 
 The final report contains four major sections: 

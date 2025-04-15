@@ -14,3 +14,7 @@ output/table2.rds: code/03_model.R  data/accident.csv
 
 clean:
 	rm output/* && rm *.html
+
+.PHONY: install
+install:
+	Rscript -e "renv::restore(prompt = FALSE)"
