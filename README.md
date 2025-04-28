@@ -2,6 +2,14 @@
 # Project Description 
 
 
+## Building the Docker image
+
+* Ensure your working directory is set to be this Final_project directory
+* The Docker image can be built from a call to `make project_image`
+* The publicly-available image for this project is called `eduardogon/project_image`
+  * Link: https://hub.docker.com/repository/docker/eduardogon/project_image/general
+
+
 ## Synchronizing the package repository
 
 * Ensure your working directory is set to be this Final_project directory
@@ -16,7 +24,18 @@ The final report contains four major sections:
 * `Scatter Plot` 
 * `Logistic Regression Model` 
 
-The final report should build from a single call to `make` from the command line. 
+### Options for building the final report
+
+The final report can be built from a call to `make report/Road_accidents_report.html`
+at the command line, which will execute the following Docker run command on Mac based 
+on the project image:
+* `docker run -v "$(pwd)/final_report":/project/final_report eduardogon/project_image`
+  * To get this command to work from a Windows system, an additional "\" is needed 
+    at the start of the file path in the Makefile line 35
+* The report should then appear in the `report` folder 
+
+The report can also build from a single call to `make` from the command line.
+For this method, the package environment should be synchronized first (see above).
 
 
 ## Folder structure 
