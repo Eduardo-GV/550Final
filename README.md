@@ -26,10 +26,12 @@ The final report contains four major sections:
 
 ### Options for building the final report
 
+Set working directory to this `Final_project` folder.
+
 The final report can be built from a call to `make report/Road_accidents_report.html`
 at the command line, which will execute the following Docker run command on Mac based 
 on the project image:
-* `docker run -v "$(pwd)/final_report":/project/final_report eduardogon/project_image`
+* `docker run -v "$(pwd)/report":/project/final_report eduardogon/project_image`
   * To get this command to work from a Windows system, an additional "\" is needed 
     at the start of the file path in the Makefile line 35
 * The report should then appear in the `report` folder 
